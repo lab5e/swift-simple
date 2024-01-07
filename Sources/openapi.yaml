@@ -1,0 +1,5882 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: dev@lab5e.com
+    name: Lab5e AS
+    url: https://lab5e.com
+  description: "API for device, collection, output and firmware management"
+  title: The Span API
+  version: 4.8.0 indecipherable-ferman
+servers:
+- url: https://api.lab5e.com/
+security:
+- APIToken: []
+tags:
+- name: Span
+paths:
+  /span/collections:
+    get:
+      description: |-
+        Lists all the collections that one of your teams owns. The collections
+        returned includes only the data on the collection and not the summary
+        information
+      operationId: ListCollections
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List collections
+      tags:
+      - collections
+    post:
+      description: Create a new collection
+      operationId: CreateCollection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCollectionRequest'
+        description: |-
+          Request object when creating a collection. The collect ID is assigned by the
+          service.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Create collection
+      tags:
+      - collections
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}:
+    delete:
+      description: |-
+        Remove the collection. Devices, firmware images, outputs and all other
+        related resources must be removed from the collection before it can be
+        deleted.
+      operationId: DeleteCollection
+      parameters:
+      - description: The ID of the collection you want to delete
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Delete collection
+      tags:
+      - collections
+    get:
+      description: |-
+        Retrieve collection information. This includes a list of the most recent
+        messages in the inbox. The upstream and downstream parameters are optional
+        and if set to true will include the timestamps for up to 100 messages up-
+        and downstream for the last hour.
+      operationId: RetrieveCollection
+      parameters:
+      - description: The collection ID of the collection you are requesting
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: upstream
+        schema:
+          type: boolean
+      - in: query
+        name: downstream
+        schema:
+          type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve collection
+      tags:
+      - collections
+    patch:
+      description: Update a collection.
+      operationId: UpdateCollection
+      parameters:
+      - description: The ID of the collection. This is assigned by the backend.
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCollectionRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Update collection
+      tags:
+      - collections
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/blobs:
+    get:
+      description: |-
+        Retrieve a list of all the blobs stored on this collection. Blobs are
+        uploaded by the devices through one of the blob endpoints.
+      operationId: ListBlobs
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: limit
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListBlobResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List the blobs for a collection
+      tags:
+      - blobs
+  /span/collections/{collectionId}/blobs/{blobId}:
+    delete:
+      description: Remove a blob stored on the collection.
+      operationId: DeleteBlob
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: blobId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteBlobResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Remove a blob stored on a collection
+      tags:
+      - blobs
+  /span/collections/{collectionId}/certificates:
+    get:
+      description: |-
+        Get the certificate chain for the root CA and intermediate certificates
+        used by the device, gateway and server certificates. It is highly
+        recommended to verify the server certificate when sending data to avoid any
+        man-in-the-middle attacks. This chain will contain all required
+        certificates needed to verify the client certificate.
+      operationId: RetrieveCertificateChain
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: gatewayId
+        schema:
+          type: string
+      - in: query
+        name: deviceId
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateChainResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Get certificate chain
+      tags:
+      - certificates
+  /span/collections/{collectionId}/certificates/create:
+    post:
+      description: |-
+        Create a new device or gateway (client) certificate for an
+        internet-connected device. The devices will use this client certificate to
+        authenticate when sending data via the Internet endpoint. This will create
+        a X509 client certificate with an ECC public key. The key is not stored by
+        the service so keep it in a secure place once it is downloaded. The
+        returned certificate will be valid for 14 days. The key for
+        the certificate is your own responsibility. The client certificate is used
+        in both the TLS, DTLS and gRPC service endpoints.
+      operationId: CreateCertificate
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCertificateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCertificateResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Create certificate
+      tags:
+      - certificates
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/certificates/sign:
+    post:
+      description: |-
+        Sign a device or gateway (aka client) certificate. The certificate is a
+        X509 Certificate signing request PEM encoded. The certificate will be valid
+        for 14 days and must be renewed.
+      operationId: SignCertificate
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignCertificateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignCertificateResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Sign certificate
+      tags:
+      - certificates
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/certificates/verify:
+    post:
+      description: |-
+        Verify client certificate. If a client certificate fails it can be tricky
+        to pinpoint exactly *why* the certificate isn't accepted. This resource
+        validates the client certificate and returns the error in plain text.
+      operationId: VerifyCertificate
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCertificateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyCertificateResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Verify certificate
+      tags:
+      - certificates
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/data:
+    get:
+      description: |-
+        Retrieve data sent by the devices in the collection. The maximum number of
+        data points is 100.
+      operationId: ListCollectionData
+      parameters:
+      - description: The collection ID requested. This is included in the request
+          path.
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - description: Limit the number of payloads to return. The default is 512.
+        in: query
+        name: limit
+        schema:
+          format: int32
+          type: integer
+      - description: |-
+          Start of time range. The default is 24 hours ago. Value is in milliseconds
+          since epoch.
+        in: query
+        name: start
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          End of time range. The default is the current time stamp. Value is in
+          milliseconds since epoch.
+        in: query
+        name: end
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          The message offset based on the message ID. This parameter can't be
+          combined with the start and end parameters. If no parameter is set the
+          first N messages will be returned. If this parameter is set the next N
+          messages (from newest to oldest) with message ID less than the offset
+          will be returned.
+        in: query
+        name: offset
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve data from devices
+      tags:
+      - collections
+  /span/collections/{collectionId}/devices:
+    get:
+      operationId: ListDevices
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDevicesResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List devices in collection.
+      tags:
+      - devices
+    post:
+      operationId: CreateDevice
+      parameters:
+      - description: This is the containing collection
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDeviceRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Create device
+      tags:
+      - devices
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/devices/{deviceId}:
+    delete:
+      operationId: DeleteDevice
+      parameters:
+      - description: This is the containing collection
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - description: The device ID is assigned by the backend.
+        in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Remove device.
+      tags:
+      - devices
+    get:
+      operationId: RetrieveDevice
+      parameters:
+      - description: This is the containing collection
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - description: The device identifier
+        in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve device
+      tags:
+      - devices
+  /span/collections/{collectionId}/devices/{deviceId}/certs:
+    get:
+      operationId: DeviceCertificate
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceCertificateResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Get issued certificate(s) for device
+      tags:
+      - devices
+  /span/collections/{collectionId}/devices/{deviceId}/data:
+    get:
+      description: |-
+        List the data received from the device. Use the query parameters to control
+        what data you retrieve. The maximum number of data points is 100.
+      operationId: ListDeviceData
+      parameters:
+      - description: The collection ID. This is included in the request path.
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - description: The device ID. This is included in the request path.
+        in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      - description: Limit the number of payloads to return. The default is 512.
+        in: query
+        name: limit
+        schema:
+          format: int32
+          type: integer
+      - description: |-
+          Start of time range. The default is 24 hours ago. Value is in milliseconds
+          since epoch.
+        in: query
+        name: start
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          End of time range. The default is the current time stamp. Value is in
+          milliseconds since epoch.
+        in: query
+        name: end
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          The message offset based on the message ID. This parameter can't be
+          combined with the start and end parameters. If no parameter is set the
+          first N messages will be returned. If this parameter is set the next N
+          messages (from newest to oldest) with message ID less than the offset
+          will be returned.
+        in: query
+        name: offset
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve data from device
+      tags:
+      - devices
+  /span/collections/{collectionId}/devices/{deviceId}/fwerror:
+    delete:
+      operationId: ClearFirmwareError
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClearFirmwareErrorResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Clear FOTA error
+      tags:
+      - fota
+  /span/collections/{collectionId}/devices/{deviceId}/inbox:
+    get:
+      description: |-
+        Retrieve a list of incoming (ie upstream) messages, ie messages sent from
+        the device to the service. These messages are buffered in the service until
+        they expire.
+
+        Use the query parameters to limit the number of messages to return. If no
+        limit is specified the default limit of 250 is used.
+      operationId: ListUpstreamMessages
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: limit
+        schema:
+          format: int32
+          type: integer
+      - description: |-
+          Start of time range. The default is 24 hours ago. Value is in milliseconds
+          since epoch.
+        in: query
+        name: start
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          End of time range. The default is the current time stamp. Value is in
+          milliseconds since epoch.
+        in: query
+        name: end
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          The message offset based on the message ID. This parameter can't be
+          combined with the start and end parameters. If no parameter is set the
+          first N messages will be returned. If this parameter is set the next N
+          messages (from newest to oldest) with message ID less than the offset
+          will be returned.
+        in: query
+        name: offset
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUpstreamMessagesResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List incoming messages
+      tags:
+      - devices
+  /span/collections/{collectionId}/devices/{deviceId}/outbox:
+    get:
+      description: |-
+        List messages that should be sent to the device when it connects to the
+        service. The messages are sent to the device when it connects to the
+        service and either sends a message (via UDP or CoAP) or requests a message
+        via CoAP GET request.option
+      operationId: ListDownstreamMessages
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: limit
+        schema:
+          format: int32
+          type: integer
+      - description: |-
+          Start of time range. The default is 24 hours ago. Value is in milliseconds
+          since epoch.
+        in: query
+        name: start
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          End of time range. The default is the current time stamp. Value is in
+          milliseconds since epoch.
+        in: query
+        name: end
+        schema:
+          format: int64
+          type: string
+      - description: |-
+          The message offset based on the message ID. This parameter can't be
+          combined with the start and end parameters. If no parameter is set the
+          first N messages will be returned. If this parameter is set the next N
+          messages (from newest to oldest) with message ID less than the offset
+          will be returned.
+        in: query
+        name: offset
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDownstreamMessagesResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List the messages in the outbox
+      tags:
+      - devices
+    post:
+      description: |-
+        Add a new message in the outgoing queue to the device. If there is other
+        messages in the outbox these messages will be sent first.
+      operationId: AddDownstreamMessage
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddDownstreamMessageRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageDownstream'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Add message to oubox
+      tags:
+      - devices
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/devices/{deviceId}/outbox/{messageId}:
+    delete:
+      description: Delete an outgoing (ie downstream) message from the outbox.
+      operationId: DeleteDownstreamMessage
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: messageId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteDownstreamMessageResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Delete outgoing message
+      tags:
+      - devices
+  /span/collections/{collectionId}/devices/{deviceId}/stats:
+    get:
+      operationId: RetrieveDeviceStats
+      parameters:
+      - description: This is the containing collection
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - description: The device identifier
+        in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceStats'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve device statistics
+      tags:
+      - devices
+  /span/collections/{collectionId}/firmware:
+    get:
+      operationId: ListFirmware
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFirmwareResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List firmware
+      tags:
+      - fota
+    post:
+      description: |-
+        Firmware images must have unique version numbers and have an unique
+        checksum. The checksum is calculated when the firmware image is uploaded.
+      operationId: CreateFirmware
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFirmwareRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Firmware'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Create firmware
+      tags:
+      - fota
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/firmware/{imageId}:
+    delete:
+      operationId: DeleteFirmware
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: imageId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Firmware'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Delete firmware
+      tags:
+      - fota
+    get:
+      operationId: RetrieveFirmware
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: imageId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Firmware'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve firmware
+      tags:
+      - fota
+  /span/collections/{collectionId}/firmware/{imageId}/stats:
+    get:
+      operationId: RetrieveFirmwareStats
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: imageId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmwareStats'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve firmware statistics
+      tags:
+      - fota
+  /span/collections/{collectionId}/firmware/{imageId}/usage:
+    get:
+      operationId: FirmwareUsage
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: imageId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirmwareUsageResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Firmware usage
+      tags:
+      - fota
+  /span/collections/{collectionId}/gateways:
+    get:
+      description: "List the user's gatways, including built-in gateways."
+      operationId: ListGateways
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListGatewayResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List gateways
+      tags:
+      - gateways
+    post:
+      description: Create a new gateway.
+      operationId: CreateGateway
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGateway_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gateway'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Create gateway
+      tags:
+      - gateways
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/gateways/{gatewayId}:
+    delete:
+      description: Remove a gateway from Span.
+      operationId: DeleteGateway
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: gatewayId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gateway'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Delete gateway
+      tags:
+      - gateways
+    get:
+      description: Get gateway information
+      operationId: RetrieveGateway
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: gatewayId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gateway'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve gateway
+      tags:
+      - gateways
+  /span/collections/{collectionId}/gateways/{gatewayId}/certs:
+    get:
+      operationId: GatewayCertificates
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: gatewayId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayCertificateResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Get issued certificate(s) for gateway
+      tags:
+      - gateways
+  /span/collections/{collectionId}/gateways/{gatewayId}/stats:
+    get:
+      description: Get statistics for gateway
+      operationId: RetrieveGatewayStats
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: gatewayId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayStats'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve gateway statistics
+      tags:
+      - gateways
+  /span/collections/{collectionId}/outputs:
+    get:
+      operationId: ListOutputs
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOutputResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: List outputs
+      tags:
+      - outputs
+    post:
+      operationId: CreateOutput
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOutputRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Output'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Create output
+      tags:
+      - outputs
+      x-codegen-request-body-name: body
+  /span/collections/{collectionId}/outputs/{outputId}:
+    delete:
+      operationId: DeleteOutput
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: outputId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Output'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Delete output
+      tags:
+      - outputs
+    get:
+      operationId: RetrieveOutput
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: outputId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Output'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve output
+      tags:
+      - outputs
+  /span/collections/{collectionId}/outputs/{outputId}/logs:
+    get:
+      operationId: Logs
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: outputId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputLogResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Output logs
+      tags:
+      - outputs
+  /span/collections/{collectionId}/outputs/{outputId}/stats:
+    get:
+      operationId: RetrieveOutputStats
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: outputId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputStats'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve output statistics
+      tags:
+      - outputs
+  /span/collections/{collectionId}/outputs/{outputId}/status:
+    get:
+      operationId: Status
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: outputId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputStatusResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Output status
+      tags:
+      - outputs
+  /span/collections/{collectionId}/stats:
+    get:
+      description: |-
+        Retrieve statistics for the collection. This is the aggregated metrics for
+        devices, outputs, firmware images, blobs and gateways in the collection
+      operationId: RetrieveCollectionStats
+      parameters:
+      - description: The collection ID of the collection you are requesting
+        in: path
+        name: collectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionStats'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Retrieve collection statistics
+      tags:
+      - collections
+  /span/collections/{existingCollectionId}/devices/{deviceId}:
+    patch:
+      description: |-
+        The device can be moved from one collection to another by setting the
+        collection ID field to the new collection. You must have administrative
+        access to both collections. A note on gateway configurations: Empty gateway
+        configuration blocks are deleted. If the configuration block contains a
+        gateway ID it will be updated  with the new values. All values must be
+        submitted in the request.
+        If a device is moved out of the collection and it references a gateway in
+        the configuration the operation will fail. Devices that are moved from one
+        collection to another and references gateway configurations must be updated
+        before they are moved.
+      operationId: UpdateDevice
+      parameters:
+      - in: path
+        name: existingCollectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: deviceId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeviceRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Update device
+      tags:
+      - devices
+      x-codegen-request-body-name: body
+  /span/collections/{existingCollectionId}/firmware/{imageId}:
+    patch:
+      description: |-
+        Only the version and tags fields can be updated. The other fields will be
+        ignored.
+      operationId: UpdateFirmware
+      parameters:
+      - in: path
+        name: existingCollectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: imageId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFirmwareRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Firmware'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Update firmware
+      tags:
+      - fota
+      x-codegen-request-body-name: body
+  /span/collections/{existingCollectionId}/gateways/{gatewayId}:
+    patch:
+      description: |-
+        Update configuration for a gateway. If you want to remove or move a gateway
+        from the collection the devices in the collection must not have any gateway
+        configuration. The certificates for the gateway are unchanged when the
+        gateway is moved.
+      operationId: UpdateGateway
+      parameters:
+      - in: path
+        name: existingCollectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: gatewayId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGateway_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gateway'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Update gateway
+      tags:
+      - gateways
+      x-codegen-request-body-name: body
+  /span/collections/{existingCollectionId}/outputs/{outputId}:
+    patch:
+      operationId: UpdateOutput
+      parameters:
+      - in: path
+        name: existingCollectionId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: outputId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOutputRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Output'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: Update output
+      tags:
+      - outputs
+      x-codegen-request-body-name: body
+  /span/system:
+    get:
+      description: |-
+        Get system information. This will show the current version of the API that
+        you are using.
+      operationId: GetSystemInfo
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInfoResponse'
+          description: A successful response.
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: It's created.
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: The request has an error.
+        "401":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: You can't touch this
+        "404":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Couldn't find the resource.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: There's a resource conflict here.
+        "500":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: I'm sorry. We are broken
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: An unexpected error response.
+      summary: System information
+      tags:
+      - Span
+components:
+  schemas:
+    Any:
+      additionalProperties:
+        type: object
+      properties:
+        '@type':
+          type: string
+      type: object
+    Blob:
+      description: |-
+        This is a blob (binary large object) that the devices might upload to the
+        service. This is messages that are typically too large to handle like regular
+        status and sensor values, typically media files. The content type might be
+        derived from the first few bytes of the blob and could possibly be incorrect.
+
+        Download the blob by accessing the blob URL field. This will work like a
+        regular HTTP request for your client. Authentication is required as always.
+      example:
+        size: size
+        created: created
+        blobId: blobId
+        blobPath: blobPath
+        contentType: contentType
+        collectionId: collectionId
+        deviceId: deviceId
+        gatewayId: gatewayId
+        properties:
+          key: properties
+      properties:
+        blobId:
+          type: string
+        blobPath:
+          type: string
+        contentType:
+          type: string
+        size:
+          format: int64
+          type: string
+        created:
+          format: int64
+          type: string
+        collectionId:
+          type: string
+        deviceId:
+          type: string
+        gatewayId:
+          type: string
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    BlobStats:
+      description: Statistics for a single blob
+      example:
+        blobBytesMb: 2.302136
+      properties:
+        blobBytesMb:
+          format: float
+          type: number
+      title: BlobStats
+      type: object
+    CellularIoTConfig:
+      description: This is the cellular IOT config
+      example:
+        imei: imei
+        imsi: imsi
+      properties:
+        imsi:
+          format: int64
+          title: The IMSI is the unique ID for the (e|nu|whatever)SIM card
+          type: string
+        imei:
+          format: int64
+          title: The IMEI number is the unique ID for your hardware as
+          type: string
+      title: CellularIOTConfig
+      type: object
+    CellularIoTMetadata:
+      description: This is the metadata for a Cellular IoT device connected via an
+        APN.
+      example:
+        lastImei: lastImei
+        country: country
+        mnc: 6
+        countryCode: countryCode
+        lastUpdate: lastUpdate
+        allocatedIp: allocatedIp
+        cellId: cellId
+        mcc: 0
+        gatewayId: gatewayId
+        lastImsi: lastImsi
+        allocatedAt: allocatedAt
+        network: network
+      properties:
+        gatewayId:
+          title: The currently used gateway
+          type: string
+        allocatedIp:
+          description: Allocated IP address.
+          type: string
+        allocatedAt:
+          format: int64
+          title: Time stamp for address allocation
+          type: string
+        cellId:
+          format: int64
+          title: "Cell ID for device. This might not be set, depending on"
+          type: string
+        mcc:
+          description: |-
+            the provider in use.
+
+            The Mobile Country Code for the operator.
+          format: int32
+          type: integer
+        mnc:
+          format: int32
+          title: The Mobile Network Code for the operator
+          type: integer
+        country:
+          title: The name of the country in plain text
+          type: string
+        network:
+          title: The name of the mobile network
+          type: string
+        countryCode:
+          title: ISO country code
+          type: string
+        lastUpdate:
+          format: int64
+          title: Last update timestamp
+          type: string
+        lastImsi:
+          format: int64
+          title: Last used IMSI
+          type: string
+        lastImei:
+          format: int64
+          title: Last used IMEI
+          type: string
+      title: CellularIOTMetadata
+      type: object
+    CertificateChainResponse:
+      description: Response when retrieving a certificate chain
+      example:
+        chain: chain
+      properties:
+        chain:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: CertificateChainResponse
+      type: object
+    CertificateInfo:
+      description: Certificate information
+      example:
+        expires: expires
+        certificateSerial: certificateSerial
+      properties:
+        certificateSerial:
+          type: string
+        expires:
+          format: int64
+          type: string
+      title: CertificateInfo
+      type: object
+    ClearFirmwareErrorResponse:
+      description: Clear firmware error response object
+      example:
+        result: result
+      properties:
+        result:
+          type: string
+      title: ClearFirmwareErrorResponse
+      type: object
+    CoAPMetadata:
+      description: CoAP metadata for messages received through one of the CoAP endpoints
+      example:
+        path: path
+        code: code
+      properties:
+        code:
+          type: string
+        path:
+          type: string
+      title: CoAPMetadata
+      type: object
+    Collection:
+      description: This is a collection
+      example:
+        downstreamTimestamps:
+        - downstreamTimestamps
+        - downstreamTimestamps
+        teamId: teamId
+        upstreamTimestamps:
+        - upstreamTimestamps
+        - upstreamTimestamps
+        collectionId: collectionId
+        firmware:
+          currentFirmwareId: currentFirmwareId
+          management: null
+          targetFirmwareId: targetFirmwareId
+        tags:
+          key: tags
+      properties:
+        collectionId:
+          description: The ID of the collection. This is assigned by the backend.
+          type: string
+        teamId:
+          description: |-
+            The team ID that owns the collection. This field is required. When you
+            create new collections the default is to use your private team ID.
+          type: string
+        firmware:
+          $ref: '#/components/schemas/CollectionFirmware'
+        tags:
+          additionalProperties:
+            type: string
+          description: |-
+            Tags for the collection. Tags are metadata fields that you can assign to
+            the collection.
+          type: object
+        upstreamTimestamps:
+          items:
+            format: int64
+            type: string
+          title: |-
+            This contains a list with timestamps for the most recent messages received
+            by the collection. This list is only populated if you retrieve a single
+            collection
+          type: array
+        downstreamTimestamps:
+          items:
+            format: int64
+            type: string
+          title: |-
+            This contains a list with timestamps for the most received messages sent
+            to devices in the collection. This list is only populated when you retrieve
+            a single collection
+          type: array
+      title: Collection
+      type: object
+    CollectionFirmware:
+      description: This is the firmware configuration for a collection.
+      example:
+        currentFirmwareId: currentFirmwareId
+        management: null
+        targetFirmwareId: targetFirmwareId
+      properties:
+        currentFirmwareId:
+          description: The current firmware is the firmware that the devices are currently
+            using.
+          type: string
+        targetFirmwareId:
+          description: |-
+            The target firmware is set to the desired firmware image for the devices in
+            this collection. If the management is set to "device" this will only be
+            used if the target firmware isn't set on the device itself.
+          type: string
+        management:
+          $ref: '#/components/schemas/FirmwareManagement'
+      title: CollectionFirmware
+      type: object
+    CollectionStats:
+      description: This is statistics for an collection.
+      example:
+        firmwareCount: 1
+        outputs:
+          forwardErrors: 0
+          bytesForwardedMb: 1.4658129
+          messagesForwarded: 6
+        outputCount: 6
+        blobs:
+          blobBytesMb: 2.302136
+        gateways:
+          messagesDownstream: 6
+          bytesDownstreamMb: 5.962134
+          bytesUpstreamMb: 1.4658129
+          messagesUpstream: 0
+        gatewayCount: 5
+        deviceCount: 0
+        devices:
+          sessionCount: 5
+          bytesDownstreamMb: 6.0274563
+          messagesDownstream: 5
+          bytesUpstreamMb: 0.8008282
+          messagesUpstream: 1
+        blobCount: 5
+        firmware:
+          firmwareImageSize: 0
+      properties:
+        deviceCount:
+          format: int32
+          type: integer
+        outputCount:
+          format: int32
+          type: integer
+        firmwareCount:
+          format: int32
+          type: integer
+        blobCount:
+          format: int32
+          type: integer
+        gatewayCount:
+          format: int32
+          type: integer
+        devices:
+          $ref: '#/components/schemas/DeviceStats'
+        outputs:
+          $ref: '#/components/schemas/OutputStats'
+        firmware:
+          $ref: '#/components/schemas/FirmwareStats'
+        blobs:
+          $ref: '#/components/schemas/BlobStats'
+        gateways:
+          $ref: '#/components/schemas/GatewayStats'
+      title: CollectionStats
+      type: object
+    CreateCertificateResponse:
+      description: Response when creating a new certificate
+      example:
+        privateKey: privateKey
+        chain: chain
+        certificate: certificate
+      properties:
+        certificate:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+        privateKey:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+        chain:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: CreateCertificateResponse
+      type: object
+    CreateCollectionRequest:
+      description: |-
+        Request object when creating a collection. The collect ID is assigned by the
+        service.
+      example:
+        teamId: teamId
+        firmware:
+          currentFirmwareId: currentFirmwareId
+          management: null
+          targetFirmwareId: targetFirmwareId
+        tags:
+          key: tags
+      properties:
+        teamId:
+          description: |-
+            The team ID that owns the collection. This field is required. When you
+            create new collections the default is to use your private team ID.
+          type: string
+        firmware:
+          $ref: '#/components/schemas/CollectionFirmware'
+        tags:
+          additionalProperties:
+            type: string
+          description: |-
+            Tags for the collection. Tags are metadata fields that you can assign to
+            the collection.
+          type: object
+      title: CreateCollectionRequest
+      type: object
+    DeleteBlobResponse:
+      description: The response when removing a blob.
+      title: DeleteBlobResponse
+      type: object
+    DeleteDownstreamMessageResponse:
+      description: Response object when deleting a downstream message
+      example:
+        messageId: messageId
+      properties:
+        messageId:
+          type: string
+      title: DeleteDownstreamMessageResponse
+      type: object
+    Device:
+      description: This a device
+      example:
+        lastPayload: lastPayload
+        metadata:
+          ciot:
+            lastImei: lastImei
+            country: country
+            mnc: 6
+            countryCode: countryCode
+            lastUpdate: lastUpdate
+            allocatedIp: allocatedIp
+            cellId: cellId
+            mcc: 0
+            gatewayId: gatewayId
+            lastImsi: lastImsi
+            allocatedAt: allocatedAt
+            network: network
+          inet:
+            certificateSerial: certificateSerial
+            lastUpdate: lastUpdate
+            gatewayId: gatewayId
+            remoteAddress: remoteAddress
+          gateway:
+            lastUpdate: lastUpdate
+            params:
+              key: params
+            gatewayId: gatewayId
+        lastGatewayId: lastGatewayId
+        lastReceived: lastReceived
+        lastTransport: null
+        deviceId: deviceId
+        collectionId: collectionId
+        firmware:
+          currentFirmwareId: currentFirmwareId
+          serialNumber: serialNumber
+          targetFirmwareId: targetFirmwareId
+          stateMessage: stateMessage
+          modelNumber: modelNumber
+          state: state
+          firmwareVersion: firmwareVersion
+          manufacturer: manufacturer
+        config:
+          ciot:
+            imei: imei
+            imsi: imsi
+          inet: "{}"
+          gateway:
+            key:
+              params:
+                key: params
+              gatewayId: gatewayId
+        tags:
+          key: tags
+      properties:
+        deviceId:
+          description: The device ID is assigned by the backend.
+          type: string
+        collectionId:
+          title: This is the containing collection
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          description: |-
+            Tags are metadata for the device that you can set. These are just
+            strings.
+          type: object
+        firmware:
+          $ref: '#/components/schemas/FirmwareMetadata'
+        config:
+          $ref: '#/components/schemas/DeviceConfig'
+        metadata:
+          $ref: '#/components/schemas/DeviceMetadata'
+        lastGatewayId:
+          type: string
+        lastTransport:
+          $ref: '#/components/schemas/MessageTransport'
+        lastReceived:
+          format: int64
+          type: string
+        lastPayload:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: Device
+      type: object
+    DeviceCertificateResponse:
+      description: Response object for certificate info resource
+      example:
+        certificates:
+        - expires: expires
+          certificateSerial: certificateSerial
+        - expires: expires
+          certificateSerial: certificateSerial
+      properties:
+        certificates:
+          items:
+            $ref: '#/components/schemas/CertificateInfo'
+          type: array
+      title: DeviceCertificateResponse
+      type: object
+    DeviceConfig:
+      description: This is the configuration for the device via the various gateways.
+      example:
+        ciot:
+          imei: imei
+          imsi: imsi
+        inet: "{}"
+        gateway:
+          key:
+            params:
+              key: params
+            gatewayId: gatewayId
+      properties:
+        ciot:
+          $ref: '#/components/schemas/CellularIoTConfig'
+        inet:
+          description: |-
+            This is the configuration for an internet-connected device. There are
+            currently no configuration options for internet devices; the device is
+            identified via the clientcertificate.
+
+            This is empty since there's no configuration required for the internet
+             gateway
+          title: InetConfig
+          type: object
+        gateway:
+          additionalProperties:
+            $ref: '#/components/schemas/GatewayDeviceConfig'
+          title: Configuration for customer managed gateways
+          type: object
+      title: DeviceConfig
+      type: object
+    DeviceMetadata:
+      description: This is the metadata for devices.
+      example:
+        ciot:
+          lastImei: lastImei
+          country: country
+          mnc: 6
+          countryCode: countryCode
+          lastUpdate: lastUpdate
+          allocatedIp: allocatedIp
+          cellId: cellId
+          mcc: 0
+          gatewayId: gatewayId
+          lastImsi: lastImsi
+          allocatedAt: allocatedAt
+          network: network
+        inet:
+          certificateSerial: certificateSerial
+          lastUpdate: lastUpdate
+          gatewayId: gatewayId
+          remoteAddress: remoteAddress
+        gateway:
+          lastUpdate: lastUpdate
+          params:
+            key: params
+          gatewayId: gatewayId
+      properties:
+        ciot:
+          $ref: '#/components/schemas/CellularIoTMetadata'
+        inet:
+          $ref: '#/components/schemas/InetMetadata'
+        gateway:
+          $ref: '#/components/schemas/GatewayDeviceMetadata'
+      title: DeviceMetadata
+      type: object
+    DeviceStats:
+      description: This is the statistics for a single device
+      example:
+        sessionCount: 5
+        bytesDownstreamMb: 6.0274563
+        messagesDownstream: 5
+        bytesUpstreamMb: 0.8008282
+        messagesUpstream: 1
+      properties:
+        bytesUpstreamMb:
+          format: float
+          type: number
+        bytesDownstreamMb:
+          format: float
+          type: number
+        messagesUpstream:
+          format: int32
+          type: integer
+        messagesDownstream:
+          format: int32
+          type: integer
+        sessionCount:
+          format: int32
+          type: integer
+      title: DeviceStats
+      type: object
+    Firmware:
+      description: "Firmware images aren't served back out through the API, only the\
+        \ metadata."
+      example:
+        imageId: imageId
+        filename: filename
+        sha256: sha256
+        created: created
+        length: 0
+        version: version
+        collectionId: collectionId
+        tags:
+          key: tags
+      properties:
+        imageId:
+          title: Firmware image ID
+          type: string
+        version:
+          description: |-
+            Make sure that the firmware image reports this version. If the version
+            reported by this image is different the FOTA process won't be reported
+            as successful since the device will report a version different from this.
+          title: Version string reported by the firmware image
+          type: string
+        filename:
+          description: |-
+            This is just for internal house keeping, making it potentially easier to
+            identify the firmware image.
+          title: File name for image
+          type: string
+        sha256:
+          description: |-
+            To ensure each image is unique the SHA-256 hash for all images in a
+            collection must be unqique
+          title: SHA-256 hash of image
+          type: string
+        length:
+          format: int32
+          title: Length of firmware image
+          type: integer
+        collectionId:
+          description: Collection ID for the collection owning the firmware image.
+          title: Collection ID
+          type: string
+        created:
+          format: int64
+          title: Upload time stamp
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          description: Tags for firmware image.
+          type: object
+      title: Firmware
+      type: object
+    FirmwareManagement:
+      default: unspecified
+      description: |-
+        The firmware management settings for a collection can either be "disabled",
+        ie there is no firmware management for this collection, "collection";
+        devices are managed through the settings on the collection or "device"
+        where each device is configured individual.
+      enum:
+      - unspecified
+      - disabled
+      - collection
+      - device
+      type: string
+    FirmwareMetadata:
+      description: Metadata about firmware on devices.
+      example:
+        currentFirmwareId: currentFirmwareId
+        serialNumber: serialNumber
+        targetFirmwareId: targetFirmwareId
+        stateMessage: stateMessage
+        modelNumber: modelNumber
+        state: state
+        firmwareVersion: firmwareVersion
+        manufacturer: manufacturer
+      properties:
+        currentFirmwareId:
+          title: Current firmware ID reported in use
+          type: string
+        targetFirmwareId:
+          title: The target firmware ID for the device
+          type: string
+        firmwareVersion:
+          description: Last reported firmware version.
+          type: string
+        serialNumber:
+          title: Last reported serial number
+          type: string
+        modelNumber:
+          title: Last reported model number
+          type: string
+        manufacturer:
+          title: Last reported manufacturer string
+          type: string
+        state:
+          title: Firmware state
+          type: string
+        stateMessage:
+          title: Description of firmware state
+          type: string
+      title: FirmwareMetadata
+      type: object
+    FirmwareStats:
+      description: Statistics for a single firmware image
+      example:
+        firmwareImageSize: 0
+      properties:
+        firmwareImageSize:
+          format: int32
+          type: integer
+      title: FirmwareStats
+      type: object
+    FirmwareUsageResponse:
+      description: Firmware usage report
+      example:
+        current:
+        - current
+        - current
+        imageId: imageId
+        targeted:
+        - targeted
+        - targeted
+      properties:
+        imageId:
+          title: Yes it is inconsistent
+          type: string
+        targeted:
+          items:
+            type: string
+          type: array
+        current:
+          items:
+            type: string
+          type: array
+      title: FirmwareUsageResponse
+      type: object
+    Gateway:
+      description: A gateway is a connection between devices and Span
+      example:
+        builtIn: true
+        name: name
+        type: null
+        collectionId: collectionId
+        config:
+          ciot:
+            udpEndpoint: udpEndpoint
+            coapEndpoint: coapEndpoint
+            apn: apn
+          inet:
+            coapEndpoint: coapEndpoint
+            mqttEndpoint: mqttEndpoint
+            dtlsEndpoint: dtlsEndpoint
+          user:
+            params:
+              key: params
+        gatewayId: gatewayId
+        tags:
+          key: tags
+        status: null
+      properties:
+        gatewayId:
+          type: string
+        collectionId:
+          type: string
+        name:
+          type: string
+        builtIn:
+          type: boolean
+        type:
+          $ref: '#/components/schemas/GatewayType'
+        config:
+          $ref: '#/components/schemas/GatewayConfig'
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+        status:
+          $ref: '#/components/schemas/GatewayStatus'
+      title: Gateway
+      type: object
+    GatewayCIoTConfig:
+      example:
+        udpEndpoint: udpEndpoint
+        coapEndpoint: coapEndpoint
+        apn: apn
+      properties:
+        apn:
+          type: string
+        udpEndpoint:
+          type: string
+        coapEndpoint:
+          type: string
+      type: object
+    GatewayCertificateResponse:
+      example:
+        certificates:
+        - expires: expires
+          certificateSerial: certificateSerial
+        - expires: expires
+          certificateSerial: certificateSerial
+      properties:
+        certificates:
+          items:
+            $ref: '#/components/schemas/CertificateInfo'
+          type: array
+      type: object
+    GatewayConfig:
+      example:
+        ciot:
+          udpEndpoint: udpEndpoint
+          coapEndpoint: coapEndpoint
+          apn: apn
+        inet:
+          coapEndpoint: coapEndpoint
+          mqttEndpoint: mqttEndpoint
+          dtlsEndpoint: dtlsEndpoint
+        user:
+          params:
+            key: params
+      properties:
+        ciot:
+          $ref: '#/components/schemas/GatewayCIoTConfig'
+        inet:
+          $ref: '#/components/schemas/GatewayInetConfig'
+        user:
+          $ref: '#/components/schemas/GatewayCustomConfig'
+      type: object
+    GatewayCustomConfig:
+      example:
+        params:
+          key: params
+      properties:
+        params:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    GatewayDeviceConfig:
+      description: |-
+        Configuration parameters for a device in a user-managed gateway. The
+        configuration parameters depends on the type of gateway.
+      example:
+        params:
+          key: params
+        gatewayId: gatewayId
+      properties:
+        gatewayId:
+          description: This is the ID of the gateway this configuration applies to.
+          type: string
+        params:
+          additionalProperties:
+            type: string
+          title: The parameters for the gateway
+          type: object
+      title: GatewayDeviceConfig
+      type: object
+    GatewayDeviceMetadata:
+      description: |-
+        Metadata for devices connected via user-managed gateways. This metadata shows
+        the configuration for the last message transmission
+      example:
+        lastUpdate: lastUpdate
+        params:
+          key: params
+        gatewayId: gatewayId
+      properties:
+        gatewayId:
+          type: string
+        lastUpdate:
+          format: int64
+          type: string
+        params:
+          additionalProperties:
+            type: string
+          type: object
+      title: GatewayDeviceMetadata
+      type: object
+    GatewayInetConfig:
+      example:
+        coapEndpoint: coapEndpoint
+        mqttEndpoint: mqttEndpoint
+        dtlsEndpoint: dtlsEndpoint
+      properties:
+        dtlsEndpoint:
+          type: string
+        coapEndpoint:
+          type: string
+        mqttEndpoint:
+          type: string
+      type: object
+    GatewayMetadata:
+      description: |-
+        Metadata for gateway transports. The actual contents varies from gateway to
+        gateway
+      example:
+        metadata:
+          key: metadata
+      properties:
+        metadata:
+          additionalProperties:
+            type: string
+          type: object
+      title: GatewayMetadata
+      type: object
+    GatewayStats:
+      description: This is statistics for a single gateway
+      example:
+        messagesDownstream: 6
+        bytesDownstreamMb: 5.962134
+        bytesUpstreamMb: 1.4658129
+        messagesUpstream: 0
+      properties:
+        messagesUpstream:
+          format: int32
+          type: integer
+        messagesDownstream:
+          format: int32
+          type: integer
+        bytesUpstreamMb:
+          format: float
+          type: number
+        bytesDownstreamMb:
+          format: float
+          type: number
+      title: GatewayStats
+      type: object
+    GatewayStatus:
+      default: unknown
+      enum:
+      - unknown
+      - offline
+      - online
+      type: string
+    GatewayType:
+      default: unknown
+      enum:
+      - unknown
+      - ciot
+      - inet
+      - lora
+      - openthread
+      - zigbee
+      - matter
+      - custom
+      type: string
+    InetConfig:
+      description: |-
+        This is the configuration for an internet-connected device. There are
+        currently no configuration options for internet devices; the device is
+        identified via the clientcertificate.
+
+        This is empty since there's no configuration required for the internet
+         gateway
+      title: InetConfig
+      type: object
+    InetMetadata:
+      description: |-
+        Metadata for devices connected via the internet gateway. This metadata shows
+        the configuration for the last message transmission.
+      example:
+        certificateSerial: certificateSerial
+        lastUpdate: lastUpdate
+        gatewayId: gatewayId
+        remoteAddress: remoteAddress
+      properties:
+        gatewayId:
+          type: string
+        lastUpdate:
+          format: int64
+          type: string
+        remoteAddress:
+          type: string
+        certificateSerial:
+          format: int64
+          type: string
+      title: InetMetadata
+      type: object
+    ListBlobResponse:
+      description: Response object when listing blobs for a collection
+      example:
+        blobs:
+        - size: size
+          created: created
+          blobId: blobId
+          blobPath: blobPath
+          contentType: contentType
+          collectionId: collectionId
+          deviceId: deviceId
+          gatewayId: gatewayId
+          properties:
+            key: properties
+        - size: size
+          created: created
+          blobId: blobId
+          blobPath: blobPath
+          contentType: contentType
+          collectionId: collectionId
+          deviceId: deviceId
+          gatewayId: gatewayId
+          properties:
+            key: properties
+      properties:
+        blobs:
+          items:
+            $ref: '#/components/schemas/Blob'
+          type: array
+      title: ListBlobResponse
+      type: object
+    ListCollectionResponse:
+      description: Collection list. The list contains all the collections you have
+        access to.
+      example:
+        collections:
+        - downstreamTimestamps:
+          - downstreamTimestamps
+          - downstreamTimestamps
+          teamId: teamId
+          upstreamTimestamps:
+          - upstreamTimestamps
+          - upstreamTimestamps
+          collectionId: collectionId
+          firmware:
+            currentFirmwareId: currentFirmwareId
+            management: null
+            targetFirmwareId: targetFirmwareId
+          tags:
+            key: tags
+        - downstreamTimestamps:
+          - downstreamTimestamps
+          - downstreamTimestamps
+          teamId: teamId
+          upstreamTimestamps:
+          - upstreamTimestamps
+          - upstreamTimestamps
+          collectionId: collectionId
+          firmware:
+            currentFirmwareId: currentFirmwareId
+            management: null
+            targetFirmwareId: targetFirmwareId
+          tags:
+            key: tags
+      properties:
+        collections:
+          items:
+            $ref: '#/components/schemas/Collection'
+          type: array
+      title: ListCollectionResponse
+      type: object
+    ListDataResponse:
+      description: List of device payloads
+      example:
+        data:
+        - coapMetaData:
+            path: path
+            code: code
+          payload: payload
+          gatewayMetaData:
+            metadata:
+              key: metadata
+          messageId: messageId
+          received: received
+          mqttMetaData:
+            topic: topic
+          transport: transport
+          type: null
+          device:
+            lastPayload: lastPayload
+            metadata:
+              ciot:
+                lastImei: lastImei
+                country: country
+                mnc: 6
+                countryCode: countryCode
+                lastUpdate: lastUpdate
+                allocatedIp: allocatedIp
+                cellId: cellId
+                mcc: 0
+                gatewayId: gatewayId
+                lastImsi: lastImsi
+                allocatedAt: allocatedAt
+                network: network
+              inet:
+                certificateSerial: certificateSerial
+                lastUpdate: lastUpdate
+                gatewayId: gatewayId
+                remoteAddress: remoteAddress
+              gateway:
+                lastUpdate: lastUpdate
+                params:
+                  key: params
+                gatewayId: gatewayId
+            lastGatewayId: lastGatewayId
+            lastReceived: lastReceived
+            lastTransport: null
+            deviceId: deviceId
+            collectionId: collectionId
+            firmware:
+              currentFirmwareId: currentFirmwareId
+              serialNumber: serialNumber
+              targetFirmwareId: targetFirmwareId
+              stateMessage: stateMessage
+              modelNumber: modelNumber
+              state: state
+              firmwareVersion: firmwareVersion
+              manufacturer: manufacturer
+            config:
+              ciot:
+                imei: imei
+                imsi: imsi
+              inet: "{}"
+              gateway:
+                key:
+                  params:
+                    key: params
+                  gatewayId: gatewayId
+            tags:
+              key: tags
+          gatewayId: gatewayId
+          udpMetaData:
+            localPort: 1
+            remotePort: 5
+        - coapMetaData:
+            path: path
+            code: code
+          payload: payload
+          gatewayMetaData:
+            metadata:
+              key: metadata
+          messageId: messageId
+          received: received
+          mqttMetaData:
+            topic: topic
+          transport: transport
+          type: null
+          device:
+            lastPayload: lastPayload
+            metadata:
+              ciot:
+                lastImei: lastImei
+                country: country
+                mnc: 6
+                countryCode: countryCode
+                lastUpdate: lastUpdate
+                allocatedIp: allocatedIp
+                cellId: cellId
+                mcc: 0
+                gatewayId: gatewayId
+                lastImsi: lastImsi
+                allocatedAt: allocatedAt
+                network: network
+              inet:
+                certificateSerial: certificateSerial
+                lastUpdate: lastUpdate
+                gatewayId: gatewayId
+                remoteAddress: remoteAddress
+              gateway:
+                lastUpdate: lastUpdate
+                params:
+                  key: params
+                gatewayId: gatewayId
+            lastGatewayId: lastGatewayId
+            lastReceived: lastReceived
+            lastTransport: null
+            deviceId: deviceId
+            collectionId: collectionId
+            firmware:
+              currentFirmwareId: currentFirmwareId
+              serialNumber: serialNumber
+              targetFirmwareId: targetFirmwareId
+              stateMessage: stateMessage
+              modelNumber: modelNumber
+              state: state
+              firmwareVersion: firmwareVersion
+              manufacturer: manufacturer
+            config:
+              ciot:
+                imei: imei
+                imsi: imsi
+              inet: "{}"
+              gateway:
+                key:
+                  params:
+                    key: params
+                  gatewayId: gatewayId
+            tags:
+              key: tags
+          gatewayId: gatewayId
+          udpMetaData:
+            localPort: 1
+            remotePort: 5
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/OutputDataMessage'
+          type: array
+      title: ListDataResponse
+      type: object
+    ListDevicesResponse:
+      description: List device response
+      example:
+        devices:
+        - lastPayload: lastPayload
+          metadata:
+            ciot:
+              lastImei: lastImei
+              country: country
+              mnc: 6
+              countryCode: countryCode
+              lastUpdate: lastUpdate
+              allocatedIp: allocatedIp
+              cellId: cellId
+              mcc: 0
+              gatewayId: gatewayId
+              lastImsi: lastImsi
+              allocatedAt: allocatedAt
+              network: network
+            inet:
+              certificateSerial: certificateSerial
+              lastUpdate: lastUpdate
+              gatewayId: gatewayId
+              remoteAddress: remoteAddress
+            gateway:
+              lastUpdate: lastUpdate
+              params:
+                key: params
+              gatewayId: gatewayId
+          lastGatewayId: lastGatewayId
+          lastReceived: lastReceived
+          lastTransport: null
+          deviceId: deviceId
+          collectionId: collectionId
+          firmware:
+            currentFirmwareId: currentFirmwareId
+            serialNumber: serialNumber
+            targetFirmwareId: targetFirmwareId
+            stateMessage: stateMessage
+            modelNumber: modelNumber
+            state: state
+            firmwareVersion: firmwareVersion
+            manufacturer: manufacturer
+          config:
+            ciot:
+              imei: imei
+              imsi: imsi
+            inet: "{}"
+            gateway:
+              key:
+                params:
+                  key: params
+                gatewayId: gatewayId
+          tags:
+            key: tags
+        - lastPayload: lastPayload
+          metadata:
+            ciot:
+              lastImei: lastImei
+              country: country
+              mnc: 6
+              countryCode: countryCode
+              lastUpdate: lastUpdate
+              allocatedIp: allocatedIp
+              cellId: cellId
+              mcc: 0
+              gatewayId: gatewayId
+              lastImsi: lastImsi
+              allocatedAt: allocatedAt
+              network: network
+            inet:
+              certificateSerial: certificateSerial
+              lastUpdate: lastUpdate
+              gatewayId: gatewayId
+              remoteAddress: remoteAddress
+            gateway:
+              lastUpdate: lastUpdate
+              params:
+                key: params
+              gatewayId: gatewayId
+          lastGatewayId: lastGatewayId
+          lastReceived: lastReceived
+          lastTransport: null
+          deviceId: deviceId
+          collectionId: collectionId
+          firmware:
+            currentFirmwareId: currentFirmwareId
+            serialNumber: serialNumber
+            targetFirmwareId: targetFirmwareId
+            stateMessage: stateMessage
+            modelNumber: modelNumber
+            state: state
+            firmwareVersion: firmwareVersion
+            manufacturer: manufacturer
+          config:
+            ciot:
+              imei: imei
+              imsi: imsi
+            inet: "{}"
+            gateway:
+              key:
+                params:
+                  key: params
+                gatewayId: gatewayId
+          tags:
+            key: tags
+      properties:
+        devices:
+          items:
+            $ref: '#/components/schemas/Device'
+          type: array
+      title: ListDevicesResponse
+      type: object
+    ListDownstreamMessagesResponse:
+      description: Response object when listing downstream messages
+      example:
+        messages:
+        - payload: payload
+          messageId: messageId
+          createdTime: createdTime
+          sentTime: sentTime
+          transport: null
+          state: null
+          collectionId: collectionId
+          deviceId: deviceId
+          gatewayId: gatewayId
+        - payload: payload
+          messageId: messageId
+          createdTime: createdTime
+          sentTime: sentTime
+          transport: null
+          state: null
+          collectionId: collectionId
+          deviceId: deviceId
+          gatewayId: gatewayId
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/MessageDownstream'
+          type: array
+      title: ListDownstreamMessagesResponse
+      type: object
+    ListFirmwareResponse:
+      description: List firmware response
+      example:
+        images:
+        - imageId: imageId
+          filename: filename
+          sha256: sha256
+          created: created
+          length: 0
+          version: version
+          collectionId: collectionId
+          tags:
+            key: tags
+        - imageId: imageId
+          filename: filename
+          sha256: sha256
+          created: created
+          length: 0
+          version: version
+          collectionId: collectionId
+          tags:
+            key: tags
+      properties:
+        images:
+          items:
+            $ref: '#/components/schemas/Firmware'
+          type: array
+      title: ListFirmwareResponse
+      type: object
+    ListGatewayResponse:
+      description: Response when listing gateways
+      example:
+        gateways:
+        - builtIn: true
+          name: name
+          type: null
+          collectionId: collectionId
+          config:
+            ciot:
+              udpEndpoint: udpEndpoint
+              coapEndpoint: coapEndpoint
+              apn: apn
+            inet:
+              coapEndpoint: coapEndpoint
+              mqttEndpoint: mqttEndpoint
+              dtlsEndpoint: dtlsEndpoint
+            user:
+              params:
+                key: params
+          gatewayId: gatewayId
+          tags:
+            key: tags
+          status: null
+        - builtIn: true
+          name: name
+          type: null
+          collectionId: collectionId
+          config:
+            ciot:
+              udpEndpoint: udpEndpoint
+              coapEndpoint: coapEndpoint
+              apn: apn
+            inet:
+              coapEndpoint: coapEndpoint
+              mqttEndpoint: mqttEndpoint
+              dtlsEndpoint: dtlsEndpoint
+            user:
+              params:
+                key: params
+          gatewayId: gatewayId
+          tags:
+            key: tags
+          status: null
+      properties:
+        gateways:
+          items:
+            $ref: '#/components/schemas/Gateway'
+          type: array
+      title: ListGatewayResponse
+      type: object
+    ListOutputResponse:
+      description: List outputs
+      example:
+        outputs:
+        - outputId: outputId
+          type: null
+          collectionId: collectionId
+          config:
+            clientId: clientId
+            basicAuthUser: basicAuthUser
+            basicAuthPass: basicAuthPass
+            customHeaderValue: customHeaderValue
+            customHeaderName: customHeaderName
+            payloadFormat: payloadFormat
+            url: url
+            endpoint: endpoint
+            password: password
+            disableCertCheck: true
+            port: 0
+            asIsPayload: true
+            topicTemplate: topicTemplate
+            host: host
+            eventName: eventName
+            topicName: topicName
+            payloadTemplate: payloadTemplate
+            key: key
+            username: username
+          enabled: true
+          tags:
+            key: tags
+        - outputId: outputId
+          type: null
+          collectionId: collectionId
+          config:
+            clientId: clientId
+            basicAuthUser: basicAuthUser
+            basicAuthPass: basicAuthPass
+            customHeaderValue: customHeaderValue
+            customHeaderName: customHeaderName
+            payloadFormat: payloadFormat
+            url: url
+            endpoint: endpoint
+            password: password
+            disableCertCheck: true
+            port: 0
+            asIsPayload: true
+            topicTemplate: topicTemplate
+            host: host
+            eventName: eventName
+            topicName: topicName
+            payloadTemplate: payloadTemplate
+            key: key
+            username: username
+          enabled: true
+          tags:
+            key: tags
+        collectionId: collectionId
+      properties:
+        collectionId:
+          type: string
+        outputs:
+          items:
+            $ref: '#/components/schemas/Output'
+          type: array
+      title: ListOutputResponse
+      type: object
+    ListUpstreamMessagesResponse:
+      description: Response object when listing upstream messages
+      example:
+        messages:
+        - payload: payload
+          messageId: messageId
+          received: received
+          transport: null
+          collectionId: collectionId
+          deviceId: deviceId
+          gatewayId: gatewayId
+        - payload: payload
+          messageId: messageId
+          received: received
+          transport: null
+          collectionId: collectionId
+          deviceId: deviceId
+          gatewayId: gatewayId
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/MessageUpstream'
+          type: array
+      title: ListUpstreamMessagesResponse
+      type: object
+    MQTTMetadata:
+      description: |-
+        MQTT metadata for messages received through one of the MQTT endpoints. This
+        is an EXPERIMENTAL feature.
+      example:
+        topic: topic
+      properties:
+        topic:
+          type: string
+      title: MQTTMetadata
+      type: object
+    MessageDownstream:
+      description: Downstream messages are sent from the backend to the devices.
+      example:
+        payload: payload
+        messageId: messageId
+        createdTime: createdTime
+        sentTime: sentTime
+        transport: null
+        state: null
+        collectionId: collectionId
+        deviceId: deviceId
+        gatewayId: gatewayId
+      properties:
+        messageId:
+          type: string
+        collectionId:
+          type: string
+        deviceId:
+          type: string
+        gatewayId:
+          type: string
+        createdTime:
+          format: int64
+          type: string
+        sentTime:
+          format: int64
+          type: string
+        transport:
+          $ref: '#/components/schemas/MessageTransport'
+        state:
+          $ref: '#/components/schemas/MessageState'
+        payload:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: MessageDownstream
+      type: object
+    MessageState:
+      default: unspecified
+      enum:
+      - unspecified
+      - pending
+      - sent
+      - failed
+      type: string
+    MessageTransport:
+      default: unspecified
+      description: The message transport can be UDP or CoAP.
+      enum:
+      - unspecified
+      - udp
+      - coap
+      - mqtt
+      - gateway
+      - coaps
+      - dtls
+      title: MessageTransport
+      type: string
+    MessageUpstream:
+      description: This is the messages sent from the device to the backend service
+      example:
+        payload: payload
+        messageId: messageId
+        received: received
+        transport: null
+        collectionId: collectionId
+        deviceId: deviceId
+        gatewayId: gatewayId
+      properties:
+        messageId:
+          type: string
+        collectionId:
+          type: string
+        deviceId:
+          type: string
+        gatewayId:
+          type: string
+        transport:
+          $ref: '#/components/schemas/MessageTransport'
+        received:
+          format: int64
+          title: "Time the message was received, ms from epoch"
+          type: string
+        payload:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: MessageUpstream
+      type: object
+    Output:
+      description: |-
+        Output resource. The configuration depends on the kind of output type. There
+        are five outputs: Webhooks, UDP forwarding, IFTTT events, MQTT client and
+        MQTT broker. The MQTT broker output is just used to configure the built-in
+        MQTT broker in Span.
+      example:
+        outputId: outputId
+        type: null
+        collectionId: collectionId
+        config:
+          clientId: clientId
+          basicAuthUser: basicAuthUser
+          basicAuthPass: basicAuthPass
+          customHeaderValue: customHeaderValue
+          customHeaderName: customHeaderName
+          payloadFormat: payloadFormat
+          url: url
+          endpoint: endpoint
+          password: password
+          disableCertCheck: true
+          port: 0
+          asIsPayload: true
+          topicTemplate: topicTemplate
+          host: host
+          eventName: eventName
+          topicName: topicName
+          payloadTemplate: payloadTemplate
+          key: key
+          username: username
+        enabled: true
+        tags:
+          key: tags
+      properties:
+        outputId:
+          type: string
+        collectionId:
+          type: string
+        type:
+          $ref: '#/components/schemas/OutputType'
+        config:
+          $ref: '#/components/schemas/OutputConfig'
+        enabled:
+          type: boolean
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+      title: Output
+      type: object
+    OutputConfig:
+      description: Configuration for outputs.
+      example:
+        clientId: clientId
+        basicAuthUser: basicAuthUser
+        basicAuthPass: basicAuthPass
+        customHeaderValue: customHeaderValue
+        customHeaderName: customHeaderName
+        payloadFormat: payloadFormat
+        url: url
+        endpoint: endpoint
+        password: password
+        disableCertCheck: true
+        port: 0
+        asIsPayload: true
+        topicTemplate: topicTemplate
+        host: host
+        eventName: eventName
+        topicName: topicName
+        payloadTemplate: payloadTemplate
+        key: key
+        username: username
+      properties:
+        url:
+          description: URL for the webhook.
+          title: "Webhook configuration: URL for host"
+          type: string
+        basicAuthUser:
+          title: "Webhook configuration: Basic authorization user name"
+          type: string
+        basicAuthPass:
+          title: "Webhook configuration: Basic authorization password"
+          type: string
+        customHeaderName:
+          title: "Webhook configuration: Custom header name for request"
+          type: string
+        customHeaderValue:
+          title: "Webhook configuration: Custom header value"
+          type: string
+        host:
+          title: "UDP configuration: Host name"
+          type: string
+        port:
+          format: int32
+          title: "UDP configuration: Port number"
+          type: integer
+        key:
+          title: "IFTTT configuration: Key to use"
+          type: string
+        eventName:
+          title: "IFTTT configuration: Event name"
+          type: string
+        asIsPayload:
+          title: "IFTTT configuration: Send payload as is. Base64 is the default"
+          type: boolean
+        endpoint:
+          title: |-
+            MQTT configuration: Name of endpoint (use tcp:// for unencrypted, tls://
+            for TLS. TLS is the default)
+          type: string
+        disableCertCheck:
+          description: "MQTT configuration: Disable certificate checks. Default is\
+            \ off."
+          type: boolean
+        username:
+          title: "MQTT configuration: Username for MQTT broker"
+          type: string
+        password:
+          title: "MQTT configuration: Password for broker"
+          type: string
+        clientId:
+          title: "MQTT configuration: Client ID"
+          type: string
+        topicName:
+          title: "MQTT configuration: Topic name"
+          type: string
+        topicTemplate:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          title: "MQTT broker configuration: Topic template"
+          type: string
+        payloadFormat:
+          title: "MQTT broker configuration: Payload format (json|binary)"
+          type: string
+        payloadTemplate:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          title: "MQTT broker configuration: Payload template"
+          type: string
+      title: OutputConfig
+      type: object
+    OutputDataMessage:
+      description: |-
+        The output data message contains payload plus metadata for a payload received
+        from a device.
+      example:
+        coapMetaData:
+          path: path
+          code: code
+        payload: payload
+        gatewayMetaData:
+          metadata:
+            key: metadata
+        messageId: messageId
+        received: received
+        mqttMetaData:
+          topic: topic
+        transport: transport
+        type: null
+        device:
+          lastPayload: lastPayload
+          metadata:
+            ciot:
+              lastImei: lastImei
+              country: country
+              mnc: 6
+              countryCode: countryCode
+              lastUpdate: lastUpdate
+              allocatedIp: allocatedIp
+              cellId: cellId
+              mcc: 0
+              gatewayId: gatewayId
+              lastImsi: lastImsi
+              allocatedAt: allocatedAt
+              network: network
+            inet:
+              certificateSerial: certificateSerial
+              lastUpdate: lastUpdate
+              gatewayId: gatewayId
+              remoteAddress: remoteAddress
+            gateway:
+              lastUpdate: lastUpdate
+              params:
+                key: params
+              gatewayId: gatewayId
+          lastGatewayId: lastGatewayId
+          lastReceived: lastReceived
+          lastTransport: null
+          deviceId: deviceId
+          collectionId: collectionId
+          firmware:
+            currentFirmwareId: currentFirmwareId
+            serialNumber: serialNumber
+            targetFirmwareId: targetFirmwareId
+            stateMessage: stateMessage
+            modelNumber: modelNumber
+            state: state
+            firmwareVersion: firmwareVersion
+            manufacturer: manufacturer
+          config:
+            ciot:
+              imei: imei
+              imsi: imsi
+            inet: "{}"
+            gateway:
+              key:
+                params:
+                  key: params
+                gatewayId: gatewayId
+          tags:
+            key: tags
+        gatewayId: gatewayId
+        udpMetaData:
+          localPort: 1
+          remotePort: 5
+      properties:
+        type:
+          $ref: '#/components/schemas/OutputMessageType'
+        device:
+          $ref: '#/components/schemas/Device'
+        payload:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          title: The message payload
+          type: string
+        received:
+          description: Received time for message. Value is ms since epoch.
+          format: int64
+          type: string
+        transport:
+          title: Message transport that was used
+          type: string
+        udpMetaData:
+          $ref: '#/components/schemas/UDPMetadata'
+        coapMetaData:
+          $ref: '#/components/schemas/CoAPMetadata'
+        messageId:
+          title: |-
+            The message ID for the message. This message ID is guaranteed to be unique
+            for all messages received. Note that the received time stamp and the
+            message ID might not be
+          type: string
+        mqttMetaData:
+          $ref: '#/components/schemas/MQTTMetadata'
+        gatewayMetaData:
+          $ref: '#/components/schemas/GatewayMetadata'
+        gatewayId:
+          title: The gateway that received the message
+          type: string
+      title: OutputDataMessage
+      type: object
+    OutputLogEntry:
+      description: Log entries for outputs
+      example:
+        time: time
+        message: message
+        repeated: 0
+      properties:
+        time:
+          format: int64
+          type: string
+        message:
+          type: string
+        repeated:
+          format: int32
+          type: integer
+      title: OutputLogEntry
+      type: object
+    OutputLogResponse:
+      description: List logs for output
+      example:
+        logs:
+        - time: time
+          message: message
+          repeated: 0
+        - time: time
+          message: message
+          repeated: 0
+      properties:
+        logs:
+          items:
+            $ref: '#/components/schemas/OutputLogEntry'
+          type: array
+      title: OutputLogResponse
+      type: object
+    OutputMessageType:
+      default: unknown
+      enum:
+      - unknown
+      - keepalive
+      - data
+      type: string
+    OutputStats:
+      description: Statistics for a single data router
+      example:
+        forwardErrors: 0
+        bytesForwardedMb: 1.4658129
+        messagesForwarded: 6
+      properties:
+        forwardErrors:
+          format: int32
+          type: integer
+        messagesForwarded:
+          format: int32
+          type: integer
+        bytesForwardedMb:
+          format: float
+          type: number
+      title: OutputStats
+      type: object
+    OutputStatusResponse:
+      description: Show status of output
+      example:
+        outputId: outputId
+        retransmits: 5
+        received: 1
+        collectionId: collectionId
+        enabled: true
+        errorCount: 0
+        forwarded: 6
+      properties:
+        collectionId:
+          type: string
+        outputId:
+          type: string
+        enabled:
+          type: boolean
+        errorCount:
+          format: int32
+          type: integer
+        forwarded:
+          format: int32
+          type: integer
+        received:
+          format: int32
+          type: integer
+        retransmits:
+          format: int32
+          type: integer
+      title: OutputStatusResponse
+      type: object
+    OutputType:
+      default: undefined
+      description: |-
+        Output types available
+
+         - undefined: The undefined output type is an invalid type
+      enum:
+      - undefined
+      - webhook
+      - udpout
+      - mqttclient
+      - ifttt
+      - mqttbroker
+      title: OutputType
+      type: string
+    RetrieveBlobResponse:
+      description: "This is not available throught the API, just as a regular HTTP\
+        \ response"
+      properties:
+        contentType:
+          type: string
+        size:
+          format: int32
+          type: integer
+        data:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: RetrieveBlobResponse
+      type: object
+    SignCertificateResponse:
+      description: Response when signing a certificate
+      example:
+        chain: chain
+        certificate: certificate
+      properties:
+        certificate:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+        chain:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: SignCertificateResponse
+      type: object
+    Status:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+        details:
+          items:
+            $ref: '#/components/schemas/Any'
+          type: array
+      type: object
+    SystemInfoResponse:
+      description: |-
+        Response object for system information. This contains system-level
+        information.
+      example:
+        releaseName: releaseName
+        buildDate: buildDate
+        version: version
+      properties:
+        version:
+          description: This is the system version
+          title: System version
+          type: string
+        buildDate:
+          description: The build time for this version.
+          title: Build date
+          type: string
+        releaseName:
+          description: |-
+            Human-readable code name for this release. This can be easier to remember
+            than the version number.
+          title: Release name
+          type: string
+      title: SystemInfoResponse
+      type: object
+    UDPMetadata:
+      description: UDP metadata for messages receveied through one of the UDP endpoints
+      example:
+        localPort: 1
+        remotePort: 5
+      properties:
+        localPort:
+          format: int32
+          type: integer
+        remotePort:
+          format: int32
+          type: integer
+      title: UDPMetadata
+      type: object
+    VerifyCertificateResponse:
+      description: |-
+        Response when verifying a certificate. The valid flag is set to true when the
+        certificate is valid. Any errors will be added to the errors array.
+      example:
+        valid: true
+        errors:
+        - errors
+        - errors
+      properties:
+        valid:
+          type: boolean
+        errors:
+          items:
+            type: string
+          type: array
+      title: VerifyCertificateResponse
+      type: object
+    UpdateCollectionRequest:
+      description: Request object when updating a collection
+      example:
+        teamId: teamId
+        firmware:
+          currentFirmwareId: currentFirmwareId
+          management: null
+          targetFirmwareId: targetFirmwareId
+        tags:
+          key: tags
+      properties:
+        teamId:
+          description: |-
+            The team ID that owns the collection. This field is required. When you
+            create new collections the default is to use your private team ID.
+          type: string
+        firmware:
+          $ref: '#/components/schemas/CollectionFirmware'
+        tags:
+          additionalProperties:
+            type: string
+          description: |-
+            Tags for the collection. Tags are metadata fields that you can assign to
+            the collection.
+          type: object
+      title: UpdateCollectionRequest
+      type: object
+    CreateCertificateRequest:
+      description: Request object to create a new certificate.
+      example:
+        deviceId: deviceId
+        gatewayId: gatewayId
+      properties:
+        gatewayId:
+          type: string
+        deviceId:
+          type: string
+      title: CreateCertificateRequest
+      type: object
+    SignCertificateRequest:
+      description: Request certificate signing
+      example:
+        csr: csr
+        deviceId: deviceId
+        gatewayId: gatewayId
+      properties:
+        gatewayId:
+          type: string
+        deviceId:
+          type: string
+        csr:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: SignCertificateRequest
+      type: object
+    VerifyCertificateRequest:
+      description: Verify a certificate
+      example:
+        certificate: certificate
+        deviceId: deviceId
+        gatewayId: gatewayId
+      properties:
+        gatewayId:
+          type: string
+        deviceId:
+          type: string
+        certificate:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: VerifyCertificateRequest
+      type: object
+    CreateDeviceRequest:
+      description: Request object to create new devices
+      example:
+        metadata:
+          ciot:
+            lastImei: lastImei
+            country: country
+            mnc: 6
+            countryCode: countryCode
+            lastUpdate: lastUpdate
+            allocatedIp: allocatedIp
+            cellId: cellId
+            mcc: 0
+            gatewayId: gatewayId
+            lastImsi: lastImsi
+            allocatedAt: allocatedAt
+            network: network
+          inet:
+            certificateSerial: certificateSerial
+            lastUpdate: lastUpdate
+            gatewayId: gatewayId
+            remoteAddress: remoteAddress
+          gateway:
+            lastUpdate: lastUpdate
+            params:
+              key: params
+            gatewayId: gatewayId
+        firmware:
+          currentFirmwareId: currentFirmwareId
+          serialNumber: serialNumber
+          targetFirmwareId: targetFirmwareId
+          stateMessage: stateMessage
+          modelNumber: modelNumber
+          state: state
+          firmwareVersion: firmwareVersion
+          manufacturer: manufacturer
+        config:
+          ciot:
+            imei: imei
+            imsi: imsi
+          inet: "{}"
+          gateway:
+            key:
+              params:
+                key: params
+              gatewayId: gatewayId
+        tags:
+          key: tags
+      properties:
+        tags:
+          additionalProperties:
+            type: string
+          description: |-
+            Tags are metadata for the device that you can set. These are just
+            strings.
+          type: object
+        firmware:
+          $ref: '#/components/schemas/FirmwareMetadata'
+        config:
+          $ref: '#/components/schemas/DeviceConfig'
+        metadata:
+          $ref: '#/components/schemas/DeviceMetadata'
+      title: CreateDeviceRequest
+      type: object
+    AddDownstreamMessageRequest:
+      description: This is the request object to send messages out to the devices
+      example:
+        payload: payload
+      properties:
+        payload:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+      title: AddDownstreamMessageRequest
+      type: object
+    CreateFirmwareRequest:
+      description: Create a new firmware image
+      example:
+        image: image
+        filename: filename
+        version: version
+        tags:
+          key: tags
+      properties:
+        image:
+          format: byte
+          pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+          type: string
+        version:
+          type: string
+        filename:
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+      title: CreateFirmwareRequest
+      type: object
+    CreateGateway_request:
+      properties:
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/GatewayType'
+        config:
+          $ref: '#/components/schemas/GatewayConfig'
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    CreateOutputRequest:
+      description: Request type when creating new outputs
+      example:
+        type: null
+        config:
+          clientId: clientId
+          basicAuthUser: basicAuthUser
+          basicAuthPass: basicAuthPass
+          customHeaderValue: customHeaderValue
+          customHeaderName: customHeaderName
+          payloadFormat: payloadFormat
+          url: url
+          endpoint: endpoint
+          password: password
+          disableCertCheck: true
+          port: 0
+          asIsPayload: true
+          topicTemplate: topicTemplate
+          host: host
+          eventName: eventName
+          topicName: topicName
+          payloadTemplate: payloadTemplate
+          key: key
+          username: username
+        enabled: true
+        tags:
+          key: tags
+      properties:
+        type:
+          $ref: '#/components/schemas/OutputType'
+        config:
+          $ref: '#/components/schemas/OutputConfig'
+        enabled:
+          type: boolean
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+      title: CreateOutputRequest
+      type: object
+    UpdateDeviceRequest:
+      description: Updating the device
+      example:
+        collectionId: collectionId
+        firmware:
+          currentFirmwareId: currentFirmwareId
+          serialNumber: serialNumber
+          targetFirmwareId: targetFirmwareId
+          stateMessage: stateMessage
+          modelNumber: modelNumber
+          state: state
+          firmwareVersion: firmwareVersion
+          manufacturer: manufacturer
+        config:
+          ciot:
+            imei: imei
+            imsi: imsi
+          inet: "{}"
+          gateway:
+            key:
+              params:
+                key: params
+              gatewayId: gatewayId
+        tags:
+          key: tags
+      properties:
+        collectionId:
+          description: |-
+            The collection id for the device. This field is optional and can be
+            omitted if the collection id isn't changed. When changing to a new
+            collection you must be an owner of the other collection, ie an
+            administrator of the team that owns the new collection.
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          description: |-
+            Tags are metadata for the device that you can set. These are just
+            strings.
+          type: object
+        firmware:
+          $ref: '#/components/schemas/FirmwareMetadata'
+        config:
+          $ref: '#/components/schemas/DeviceConfig'
+      title: UpdateDeviceRequest
+      type: object
+    UpdateFirmwareRequest:
+      description: This is the request object when updating the firmware image
+      example:
+        collectionId: collectionId
+        version: version
+        tags:
+          key: tags
+      properties:
+        collectionId:
+          type: string
+        version:
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+      title: UpdateFirmwareRequest
+      type: object
+    UpdateGateway_request:
+      properties:
+        name:
+          type: string
+        collectionId:
+          type: string
+        type:
+          $ref: '#/components/schemas/GatewayType'
+        config:
+          $ref: '#/components/schemas/GatewayConfig'
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    UpdateOutputRequest:
+      description: Request type to update outputs
+      example:
+        type: null
+        collectionId: collectionId
+        config:
+          clientId: clientId
+          basicAuthUser: basicAuthUser
+          basicAuthPass: basicAuthPass
+          customHeaderValue: customHeaderValue
+          customHeaderName: customHeaderName
+          payloadFormat: payloadFormat
+          url: url
+          endpoint: endpoint
+          password: password
+          disableCertCheck: true
+          port: 0
+          asIsPayload: true
+          topicTemplate: topicTemplate
+          host: host
+          eventName: eventName
+          topicName: topicName
+          payloadTemplate: payloadTemplate
+          key: key
+          username: username
+        enabled: true
+        tags:
+          key: tags
+      properties:
+        collectionId:
+          type: string
+        type:
+          $ref: '#/components/schemas/OutputType'
+        config:
+          $ref: '#/components/schemas/OutputConfig'
+        enabled:
+          type: boolean
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+      title: UpdateOutputRequest
+      type: object
+  securitySchemes:
+    APIToken:
+      description: API token that must be included in the headers unless you are logged
+        in
+      in: header
+      name: X-API-Token
+      type: apiKey
+x-original-swagger-version: "2.0"
