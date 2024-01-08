@@ -8,7 +8,7 @@ info:
   title: The Span API
   version: 4.8.0 indecipherable-ferman
 servers:
-- url: https://api.lab5e.com/
+- url: https://api.lab5e.com
 security:
 - APIToken: []
 tags:

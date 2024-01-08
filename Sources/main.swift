@@ -19,10 +19,7 @@ let client = Client(
 )
 
 let res = try await client.ListCollections()
-print("Done request")
 let body = try res.ok.body
-
-print("Body: \(body)")
 
 let collections  = try body.json.collections
 
